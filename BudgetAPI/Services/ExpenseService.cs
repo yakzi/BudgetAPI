@@ -1,5 +1,6 @@
 ﻿using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
+using BudgetAPI.Repositories;
 
 namespace BudgetAPI.Services
 {
@@ -12,14 +13,16 @@ namespace BudgetAPI.Services
     }
     internal class ExpenseService : IExpenseService
     {
+        private readonly IExpenseRepository expenseRepository;
+
+        public ExpenseService(IExpenseRepository expenseRepository)
+        {
+            this.expenseRepository = expenseRepository ?? throw new ArgumentNullException(nameof(expenseRepository));
+        }
         public async Task<Expense> CreateExpense(decimal amount, string userId, string desc, CancellationToken cancellationToken)
         {
             var Expense = new Expense(amount, Guid.Parse(userId), desc);
-            using (var context = new ApplicationDbContext())
-            {
-               await context.AddAsync(Expense, cancellationToken);
-               await context.SaveChangesAsync();
-            }
+            await expenseRepository.InsertNewExpense(Expense, cancellationToken);
             return Expense;
         }
     }

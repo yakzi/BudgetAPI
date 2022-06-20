@@ -1,5 +1,6 @@
 ﻿using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 
 namespace BudgetAPI.Repositories
@@ -24,7 +25,7 @@ namespace BudgetAPI.Repositories
         {
             using (var context = new ApplicationDbContext())
             {
-            var tasks = context.Expenses.Where(e => e.UserId == Guid.Parse(userId)).ToList();
+            var tasks = await context.Expenses.Where(e => e.UserId == Guid.Parse(userId)).ToListAsync();
             return tasks;
             }
         }

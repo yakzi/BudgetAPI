@@ -13,5 +13,13 @@ namespace BudgetAPI.Models
         public Guid UserId { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public Expense(decimal amount, Guid userId, string description)
+        {
+            Amount = amount;
+            UserId = userId;
+            Description = description;
+            CreatedDate = DateTime.Now;
+        }
     }
 }

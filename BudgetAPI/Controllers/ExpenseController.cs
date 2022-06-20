@@ -26,5 +26,20 @@ namespace BudgetAPI.Controllers
                 return BadRequest(e);
             }
         }
+
+        [HttpPost]
+        [Route("GetExpensesForUser", Name = nameof(GetExpensesForUser))]
+        public async Task<ActionResult> GetExpensesForUser(string userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var expense = await expenseService.GetExpensesForUser(userId, cancellationToken);
+                return Ok(expense);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

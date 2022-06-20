@@ -8,7 +8,7 @@ namespace BudgetAPI.Services
     public interface IExpenseService
     {
         Task<Expense> CreateExpense(decimal amount, string userId, string desc, CancellationToken cancellationToken);
-        //Task<List<Expense>> GetExpensesForUser(string userId, CancellationToken cancellationToken);
+        Task<List<Expense>> GetExpensesForUser(string userId, CancellationToken cancellationToken);
 
     }
     internal class ExpenseService : IExpenseService
@@ -24,6 +24,11 @@ namespace BudgetAPI.Services
             var Expense = new Expense(amount, Guid.Parse(userId), desc);
             await expenseRepository.InsertNewExpense(Expense, cancellationToken);
             return Expense;
+        }
+
+        public async Task<List<Expense>> GetExpensesForUser(string userId, CancellationToken cancellationToken)
+        {
+            return await expenseRepository.LoadExpensesForUser(userId, cancellationToken);
         }
     }
 }

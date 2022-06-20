@@ -1,3 +1,4 @@
+using BudgetAPI.Repositories;
 using BudgetAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 
 var app = builder.Build();
 

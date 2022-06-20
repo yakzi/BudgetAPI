@@ -1,5 +1,6 @@
 ﻿using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
+using BudgetAPI.Repositories;
 
 namespace BudgetAPI.Services
 {
@@ -10,14 +11,20 @@ namespace BudgetAPI.Services
     }
     internal class UserService : IUserService
     {
+
+        private readonly IUserRepository userRepository;
+
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        }
         public async Task<User> CreateUser(string email, string password, string name, CancellationToken cancellationToken)
         {
+
             var User = new User(email, password, name);
-            using (var context = new ApplicationDbContext())
-            {
-               await context.AddAsync(User, cancellationToken);
-               await context.SaveChangesAsync();
-            }
+
+            await userRepository.InsertNewUser(User, cancellationToken);
+
             return User;
         }
     }

@@ -1,4 +1,4 @@
-﻿using BudgetApi.Services;
+﻿using BudgetAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetAPI.Controllers

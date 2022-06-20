@@ -1,7 +1,7 @@
 ﻿using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 
-namespace BudgetApi.Services
+namespace BudgetAPI.Services
 {
 
     public interface IUserService

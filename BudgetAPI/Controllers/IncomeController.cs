@@ -27,7 +27,7 @@ namespace BudgetAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetIncomesForUser", Name = nameof(GetIncomesForUser))]
         public async Task<ActionResult> GetIncomesForUser(string userId, CancellationToken cancellationToken)
         {

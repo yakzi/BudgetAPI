@@ -27,13 +27,43 @@ namespace BudgetAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetExpensesForUser", Name = nameof(GetExpensesForUser))]
         public async Task<ActionResult> GetExpensesForUser(string userId, CancellationToken cancellationToken)
         {
             try
             {
                 var expense = await expenseService.GetExpensesForUser(userId, cancellationToken);
+                return Ok(expense);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetExpensesForUserWithSpecificDesc", Name = nameof(GetExpensesForUserWithSpecificDesc))]
+        public async Task<ActionResult> GetExpensesForUserWithSpecificDesc(string userId, string text, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var expense = await expenseService.GetExpensesForUserWithSpecificDesc(userId, text, cancellationToken);
+                return Ok(expense);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetExpensesForUserFromCurrentMonth", Name = nameof(GetExpensesForUserFromCurrentMonth))]
+        public async Task<ActionResult> GetExpensesForUserFromCurrentMonth(string userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var expense = await expenseService.GetExpensesForUserFromCurrentMonth(userId, cancellationToken);
                 return Ok(expense);
             }
             catch (Exception e)

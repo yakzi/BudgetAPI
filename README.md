@@ -7,7 +7,8 @@
 * [Screenshots](#screenshots)
 
 ## Introduction
-Web api, which allows user to register, login, add incomes and expenses
+Web api, which allows user to register, login, add incomes and expenses. 
+<h2> This project is made for learning purpose - mostly JWT, and it's under development, so some parts of the code may look weird right now </h2>
 
 ## Features
 Already done:

@@ -33,10 +33,10 @@ namespace BudgetAPI.Controllers
         {
             if(!string.IsNullOrEmpty(guid) && !string.IsNullOrEmpty(password))
             {
-               var currUser = await userService.LoadUser(guid, password, cancellationToken);
-               if (currUser != null)
+               var token = await userService.Login(guid, password, cancellationToken);
+               if (token != null)
                 {
-                    return Ok(currUser);
+                    return Ok(token);
                 }
             }
             return NotFound(guid);

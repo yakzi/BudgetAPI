@@ -8,6 +8,7 @@ namespace BudgetAPI.Repositories
     {
         Task InsertNewUser(User user, CancellationToken cancellationToken);
         Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken);
+        Task<bool> CheckUser(string guid, CancellationToken cancellationToken);
     }
     internal class SQLUserRepository : IUserRepository
     {
@@ -25,6 +26,14 @@ namespace BudgetAPI.Repositories
             using (var context = new ApplicationDbContext())
             {
                 return await context.Users.FirstOrDefaultAsync(o => o.Id.Equals(Guid.Parse(guid)) && o.Password.Equals(password), cancellationToken);
+            }
+        }
+
+        public async Task<bool> CheckUser(string guid, CancellationToken cancellationToken)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Users.AnyAsync(o => o.Id.Equals(Guid.Parse(guid)), cancellationToken);
             }
         }
     }

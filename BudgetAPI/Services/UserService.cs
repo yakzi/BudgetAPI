@@ -23,6 +23,7 @@ namespace BudgetAPI.Services
         Task<User> CreateUser(string email, string password, string name, CancellationToken cancellationToken);
         Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken);
         Task<string> Login(string guid, string password, CancellationToken cancellationToken);
+        Task<bool> GetUserTry(string guid, CancellationToken cancellationToken)
     }
     internal class UserService : IUserService
     {
@@ -52,6 +53,11 @@ namespace BudgetAPI.Services
             var currUser = await userRepository.LoadUser(guid, password, cancellationToken);
             var token = CreateToken(currUser);
             return token;
+        }
+
+        public async Task<bool> GetUserTry(string guid, CancellationToken cancellationToken)
+        {
+            return await userRepository.CheckUser(guid, cancellationToken);
         }
 
         private string CreateToken(User user)

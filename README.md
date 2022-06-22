@@ -1,4 +1,4 @@
-#BudgetAPI
+<h1>BudgetAPI</h1>
 
 ## Table of contents
 * [Introduction](#introduction)

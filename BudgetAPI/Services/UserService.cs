@@ -7,14 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-
 namespace BudgetAPI.Services
 {
 
@@ -23,7 +15,7 @@ namespace BudgetAPI.Services
         Task<User> CreateUser(string email, string password, string name, CancellationToken cancellationToken);
         Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken);
         Task<string> Login(string guid, string password, CancellationToken cancellationToken);
-        Task<bool> GetUserTry(string guid, CancellationToken cancellationToken)
+        Task<bool> GetUserTry(string guid, CancellationToken cancellationToken);
     }
     internal class UserService : IUserService
     {

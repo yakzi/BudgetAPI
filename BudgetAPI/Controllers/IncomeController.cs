@@ -19,7 +19,11 @@ namespace BudgetAPI.Controllers
             try
             {
                 var expense = await incomeService.CreateIncome(amount, desc, token, cancellationToken);
-                return Ok(expense);
+                if(expense.Result == null)
+                {
+                    return Ok(expense);
+                }
+               else return expense.Result;
             }
             catch (Exception e)
             {

@@ -56,7 +56,7 @@ namespace BudgetAPI.Services
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new Claim("name", user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("dasdsadas43253453FSFCz1243242VDSGFDSREWR"));

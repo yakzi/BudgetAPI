@@ -26,7 +26,7 @@ namespace BudgetAPI.Services
         {
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(token);
-            var x = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+            var x = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "name").Value;
             var isUser = await userService.GetUserTry(x, cancellationToken);
             if (isUser)
             {

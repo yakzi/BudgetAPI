@@ -14,11 +14,11 @@ namespace BudgetAPI.Controllers
 
         [HttpPost]
         [Route("CreateIncome", Name = nameof(CreateIncome))]
-        public async Task<ActionResult> CreateIncome(decimal amount, string userId, string desc, CancellationToken cancellationToken)
+        public async Task<ActionResult> CreateIncome(decimal amount, string desc, string token, CancellationToken cancellationToken)
         {
             try
             {
-                var expense = await incomeService.CreateIncome(amount, userId, desc, cancellationToken);
+                var expense = await incomeService.CreateIncome(amount, desc, token, cancellationToken);
                 return Ok(expense);
             }
             catch (Exception e)

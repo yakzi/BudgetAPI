@@ -26,5 +26,20 @@ namespace BudgetAPI.Controllers
                 return BadRequest(e);
             }
         }
+
+        [HttpPost]
+        [Route("Login", Name = nameof(Login))]
+        public async Task<ActionResult> Login(string guid, string password, CancellationToken cancellationToken)
+        {
+            if(!string.IsNullOrEmpty(guid) && !string.IsNullOrEmpty(password))
+            {
+               var token = await userService.Login(guid, password, cancellationToken);
+               if (token != null)
+                {
+                    return Ok(token);
+                }
+            }
+            return NotFound(guid);
+        }
     }
 }

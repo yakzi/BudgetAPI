@@ -1,4 +1,5 @@
-﻿using BudgetAPI.Data.Configuration;
+﻿using BudgetAPI.Controllers.Models;
+using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 using BudgetAPI.Repositories;
 
@@ -7,10 +8,10 @@ namespace BudgetAPI.Services
 
     public interface IExpenseService
     {
-        Task<Expense> CreateExpense(decimal amount, string userId, string desc, CancellationToken cancellationToken);
-        Task<List<Expense>> GetExpensesForUser(string userId, CancellationToken cancellationToken);
-        Task<List<Expense>> GetExpensesForUserWithSpecificDesc(string userId, string search, CancellationToken cancellationToken);
-        Task<List<Expense>> GetExpensesForUserFromCurrentMonth(string userId, CancellationToken cancellationToken);
+        Task<Expense> CreateExpense(CreateExpenseRequest createExpenseRequest, CancellationToken cancellationToken);
+        Task<List<Expense>> GetExpensesForUser(GetExpensesForUserRequest getExpensesForUserRequest, CancellationToken cancellationToken);
+        Task<List<Expense>> GetExpensesForUserWithSpecificDesc(GetExpensesForUserWithSpecificDescRequest getExpensesForUserWithSpecificDescRequest, CancellationToken cancellationToken);
+        Task<List<Expense>> GetExpensesForUserFromCurrentMonth(GetExpensesForUserRequest getExpensesForUserRequest, CancellationToken cancellationToken);
     }
     internal class ExpenseService : IExpenseService
     {
@@ -20,26 +21,26 @@ namespace BudgetAPI.Services
         {
             this.expenseRepository = expenseRepository ?? throw new ArgumentNullException(nameof(expenseRepository));
         }
-        public async Task<Expense> CreateExpense(decimal amount, string userId, string desc, CancellationToken cancellationToken)
+        public async Task<Expense> CreateExpense(CreateExpenseRequest createExpenseRequest, CancellationToken cancellationToken)
         {
-            var Expense = new Expense(amount, Guid.Parse(userId), desc);
+            var Expense = new Expense(createExpenseRequest.amount, Guid.Parse(createExpenseRequest.userId), createExpenseRequest.desc);
             await expenseRepository.InsertNewExpense(Expense, cancellationToken);
             return Expense;
         }
 
-        public async Task<List<Expense>> GetExpensesForUser(string userId, CancellationToken cancellationToken)
+        public async Task<List<Expense>> GetExpensesForUser(GetExpensesForUserRequest getExpensesForUserRequest, CancellationToken cancellationToken)
         {
-            return await expenseRepository.LoadExpensesForUser(userId, cancellationToken);
+            return await expenseRepository.LoadExpensesForUser(getExpensesForUserRequest.userId, cancellationToken);
         }
 
-        public async Task<List<Expense>> GetExpensesForUserWithSpecificDesc(string userId, string search, CancellationToken cancellationToken)
+        public async Task<List<Expense>> GetExpensesForUserWithSpecificDesc(GetExpensesForUserWithSpecificDescRequest getExpensesForUserWithSpecificDescRequest, CancellationToken cancellationToken)
         {
-            return await expenseRepository.LoadExpensesForUserWithSpecificDesc(userId, search, cancellationToken);
+            return await expenseRepository.LoadExpensesForUserWithSpecificDesc(getExpensesForUserWithSpecificDescRequest.userId, getExpensesForUserWithSpecificDescRequest.text, cancellationToken);
         }
 
-        public async Task<List<Expense>> GetExpensesForUserFromCurrentMonth(string userId, CancellationToken cancellationToken)
+        public async Task<List<Expense>> GetExpensesForUserFromCurrentMonth(GetExpensesForUserRequest getExpensesForUserRequest, CancellationToken cancellationToken)
         {
-            return await expenseRepository.LoadExpensesForUserFromCurrentMonth(userId, cancellationToken);
+            return await expenseRepository.LoadExpensesForUserFromCurrentMonth(getExpensesForUserRequest.userId, cancellationToken);
         }
     }
 }

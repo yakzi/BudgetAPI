@@ -1,4 +1,5 @@
-﻿using BudgetAPI.Services;
+﻿using BudgetAPI.Controllers.Models;
+using BudgetAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetAPI.Controllers
@@ -14,11 +15,11 @@ namespace BudgetAPI.Controllers
 
         [HttpPost]
         [Route("CreateIncome", Name = nameof(CreateIncome))]
-        public async Task<ActionResult> CreateIncome(decimal amount, string desc, string token, CancellationToken cancellationToken)
+        public async Task<ActionResult> CreateIncome(CreateIncomeRequest createIncomeRequest, CancellationToken cancellationToken)
         {
             try
             {
-                var expense = await incomeService.CreateIncome(amount, desc, token, cancellationToken);
+                var expense = await incomeService.CreateIncome(createIncomeRequest, cancellationToken);
                 if(expense.Result == null)
                 {
                     return Ok(expense);
@@ -33,11 +34,11 @@ namespace BudgetAPI.Controllers
 
         [HttpGet]
         [Route("GetIncomesForUser", Name = nameof(GetIncomesForUser))]
-        public async Task<ActionResult> GetIncomesForUser(string userId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetIncomesForUser(GetIncomesForUserRequest getIncomesForUserRequest, CancellationToken cancellationToken)
         {
             try
             {
-                var expense = await incomeService.GetIncomesForUser(userId, cancellationToken);
+                var expense = await incomeService.GetIncomesForUser(getIncomesForUserRequest, cancellationToken);
                 return Ok(expense);
             }
             catch (Exception e)

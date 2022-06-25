@@ -1,4 +1,5 @@
-﻿using BudgetAPI.Data.Configuration;
+﻿using BudgetAPI.Controllers.Models;
+using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 using BudgetAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,8 @@ namespace BudgetAPI.Services
 
     public interface IIncomeService
     {
-        Task<ActionResult<Income>> CreateIncome(decimal amount, string desc, string token, CancellationToken cancellationToken);
-        Task<List<Income>> GetIncomesForUser(string userId, CancellationToken cancellationToken);
+        Task<ActionResult<Income>> CreateIncome(CreateIncomeRequest createIncomeRequest, CancellationToken cancellationToken);
+        Task<List<Income>> GetIncomesForUser(GetIncomesForUserRequest getIncomesForUserRequest, CancellationToken cancellationToken);
 
     }
     internal class IncomeService : IIncomeService
@@ -25,16 +26,16 @@ namespace BudgetAPI.Services
             this.incomeRepository = incomeRepository ?? throw new ArgumentNullException(nameof(incomeRepository));
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
-        public async Task<ActionResult<Income>> CreateIncome(decimal amount, string desc, string token, CancellationToken cancellationToken)
+        public async Task<ActionResult<Income>> CreateIncome(CreateIncomeRequest createIncomeRequest, CancellationToken cancellationToken)
         {
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = new JwtSecurityToken();
             string? x = null;
-            if (handler.CanReadToken(token))
+            if (handler.CanReadToken(createIncomeRequest.token))
             {
                 try
                 {
-                    jwtSecurityToken = handler.ReadJwtToken(token);
+                    jwtSecurityToken = handler.ReadJwtToken(createIncomeRequest.token);
                     x = jwtSecurityToken.Claims.First(c => c.Type == "name").Value;
                 }
                 catch 
@@ -44,9 +45,9 @@ namespace BudgetAPI.Services
 
                 if (x is not null)
                 {
-                    if(await userService.GetUserTry(x, cancellationToken))
+                    if(await userService.TryGetUser(x, cancellationToken))
                     {
-                        var Income = new Income(amount, Guid.Parse(x), desc);
+                        var Income = new Income(createIncomeRequest.amount, Guid.Parse(x), createIncomeRequest.desc);
                         await incomeRepository.InsertNewIncome(Income, cancellationToken);
                         return Income;
                     }
@@ -57,9 +58,9 @@ namespace BudgetAPI.Services
             else return new BadRequestResult();
         }
 
-        public async Task<List<Income>> GetIncomesForUser(string userId, CancellationToken cancellationToken)
+        public async Task<List<Income>> GetIncomesForUser(GetIncomesForUserRequest getIncomesForUserRequest, CancellationToken cancellationToken)
         {
-            return await incomeRepository.LoadIncomesForUser(userId, cancellationToken);
+            return await incomeRepository.LoadIncomesForUser(getIncomesForUserRequest.userId, cancellationToken);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BudgetAPI.Services;
+﻿using BudgetAPI.Controllers.Models;
+using BudgetAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetAPI.Controllers
@@ -14,11 +15,11 @@ namespace BudgetAPI.Controllers
 
         [HttpPost]
         [Route("CreateUser", Name = nameof(CreateUser))]
-        public async Task<ActionResult> CreateUser(string email, string password, string name, CancellationToken cancellationToken)
+        public async Task<ActionResult> CreateUser(CreateUserRequest createUserRequest, CancellationToken cancellationToken)
         {
             try
             {
-                var user = await userService.CreateUser(email, password, name, cancellationToken);
+                var user = await userService.CreateUser(createUserRequest, cancellationToken);
                 return Ok(user);
             }
             catch (Exception e)
@@ -29,17 +30,17 @@ namespace BudgetAPI.Controllers
 
         [HttpPost]
         [Route("Login", Name = nameof(Login))]
-        public async Task<ActionResult> Login(string guid, string password, CancellationToken cancellationToken)
+        public async Task<ActionResult> Login(LoginUserRequest loginUserRequest, CancellationToken cancellationToken)
         {
-            if(!string.IsNullOrEmpty(guid) && !string.IsNullOrEmpty(password))
+            if(!string.IsNullOrEmpty(loginUserRequest.guid) && !string.IsNullOrEmpty(loginUserRequest.password))
             {
-               var token = await userService.Login(guid, password, cancellationToken);
+               var token = await userService.Login(loginUserRequest, cancellationToken);
                if (token != null)
                 {
                     return Ok(token);
                 }
             }
-            return NotFound(guid);
+            return NotFound(loginUserRequest.guid);
         }
     }
 }

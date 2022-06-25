@@ -1,4 +1,5 @@
-﻿using BudgetAPI.Data.Configuration;
+﻿using BudgetAPI.Controllers.Models;
+using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 using BudgetAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,10 @@ namespace BudgetAPI.Services
 
     public interface IUserService
     {
-        Task<User> CreateUser(string email, string password, string name, CancellationToken cancellationToken);
-        Task<User?> LoadUser(string guid, string password, CancellationToken cancellationToken);
-        Task<string> Login(string guid, string password, CancellationToken cancellationToken);
-        Task<bool> GetUserTry(string guid, CancellationToken cancellationToken);
+        Task<User> CreateUser(CreateUserRequest createUserRequest, CancellationToken cancellationToken);
+        Task<User?> LoadUser(LoginUserRequest loginUserRequest, CancellationToken cancellationToken);
+        Task<string> Login(LoginUserRequest loginUserRequest, CancellationToken cancellationToken);
+        Task<bool> TryGetUser(string guid, CancellationToken cancellationToken);
     }
     internal class UserService : IUserService
     {
@@ -28,28 +29,28 @@ namespace BudgetAPI.Services
             this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-        public async Task<User> CreateUser(string email, string password, string name, CancellationToken cancellationToken)
+        public async Task<User> CreateUser(CreateUserRequest createUserRequest, CancellationToken cancellationToken)
         {
 
-            var User = new User(email, password, name);
+            var User = new User(createUserRequest.email, createUserRequest.password, createUserRequest.name);
 
             await userRepository.InsertNewUser(User, cancellationToken);
 
             return User;
         }
-        public async Task<User?> LoadUser(string guid, string password, CancellationToken cancellationToken)
+        public async Task<User?> LoadUser(LoginUserRequest loginUserRequest, CancellationToken cancellationToken)
         {
-           return await userRepository.LoadUser(guid, password, cancellationToken);
+           return await userRepository.LoadUser(loginUserRequest.guid, loginUserRequest.password, cancellationToken);
         }
 
-        public async Task<string> Login(string guid, string password, CancellationToken cancellationToken)
+        public async Task<string> Login(LoginUserRequest loginUserRequest, CancellationToken cancellationToken)
         {
-            var currUser = await userRepository.LoadUser(guid, password, cancellationToken);
+            var currUser = await userRepository.LoadUser(loginUserRequest.guid, loginUserRequest.password, cancellationToken);
             var token = CreateToken(currUser);
             return token;
         }
 
-        public async Task<bool> GetUserTry(string guid, CancellationToken cancellationToken)
+        public async Task<bool> TryGetUser(string guid, CancellationToken cancellationToken)
         {
             return await userRepository.CheckUser(guid, cancellationToken);
         }
@@ -76,7 +77,7 @@ namespace BudgetAPI.Services
 
                 return jwt;
             }
-            else return String.Empty;
+            else return string.Empty;
         }
     }
 }

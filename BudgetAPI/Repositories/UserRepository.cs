@@ -7,7 +7,7 @@ namespace BudgetAPI.Repositories
     public interface IUserRepository
     {
         Task InsertNewUser(User user, CancellationToken cancellationToken);
-        Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken);
+        Task<User?> LoadUser(string guid, string password, CancellationToken cancellationToken);
         Task<bool> CheckUser(string guid, CancellationToken cancellationToken);
     }
     internal class SQLUserRepository : IUserRepository
@@ -27,7 +27,7 @@ namespace BudgetAPI.Repositories
             
         }
 
-        public async Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken)
+        public async Task<User?> LoadUser(string guid, string password, CancellationToken cancellationToken)
         {
             
                 return await _context.Users.FirstOrDefaultAsync(o => o.Id.Equals(Guid.Parse(guid)) && o.Password.Equals(password), cancellationToken);

@@ -30,13 +30,12 @@ namespace BudgetAPI.Services
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = new JwtSecurityToken();
             string? x = null;
-            SecurityToken validatedToken;
             if (handler.CanReadToken(token))
             {
                 try
                 {
                     jwtSecurityToken = handler.ReadJwtToken(token);
-                    x = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "name").Value;
+                    x = jwtSecurityToken.Claims.First(c => c.Type == "name").Value;
                 }
                 catch 
                 { 

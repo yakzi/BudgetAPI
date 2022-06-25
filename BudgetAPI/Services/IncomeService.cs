@@ -1,11 +1,8 @@
 ﻿using BudgetAPI.Controllers.Models;
-using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 using BudgetAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace BudgetAPI.Services
 {

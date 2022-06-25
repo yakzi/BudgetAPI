@@ -14,7 +14,6 @@ namespace BudgetAPI.Repositories
     {
 
         private readonly ApplicationDbContext _context;
-
         public SQLUserRepository(ApplicationDbContext context)
         {
             _context = context;

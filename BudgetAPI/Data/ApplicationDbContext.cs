@@ -12,7 +12,6 @@ namespace BudgetAPI.Data.Configuration
         }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Income> Incomes { get; set; }
-
         public DbSet<User> Users { get; set; }
     }
 }

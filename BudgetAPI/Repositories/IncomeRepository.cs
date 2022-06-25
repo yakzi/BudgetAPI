@@ -1,7 +1,6 @@
 ﻿using BudgetAPI.Data.Configuration;
 using BudgetAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Concurrent;
 
 namespace BudgetAPI.Repositories
 {
@@ -14,7 +13,6 @@ namespace BudgetAPI.Repositories
     {
 
         private readonly ApplicationDbContext _context;
-
         public SQLIncomeRepository(ApplicationDbContext context)
         {
             _context = context;

@@ -7,7 +7,6 @@ namespace BudgetAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserService userService;
-
         public UserController(IUserService userService)
         {
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));

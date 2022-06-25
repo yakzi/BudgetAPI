@@ -7,7 +7,6 @@ namespace BudgetAPI.Controllers
     public class IncomeController : Controller
     {
         private readonly IIncomeService incomeService;
-
         public IncomeController(IIncomeService incomeService)
         {
             this.incomeService = incomeService ?? throw new ArgumentNullException(nameof(incomeService));

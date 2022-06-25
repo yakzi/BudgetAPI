@@ -12,29 +12,33 @@ namespace BudgetAPI.Repositories
     }
     internal class SQLUserRepository : IUserRepository
     {
+
+        private readonly ApplicationDbContext _context;
+
+        public SQLUserRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task InsertNewUser(User user, CancellationToken cancellationToken)
         {
-            using (var context = new ApplicationDbContext())
-            {
-                await context.AddAsync(user, cancellationToken);
-                await context.SaveChangesAsync();
-            }
+                await _context.AddAsync(user, cancellationToken);
+                await _context.SaveChangesAsync();
+            
         }
 
         public async Task<User> LoadUser(string guid, string password, CancellationToken cancellationToken)
         {
-            using (var context = new ApplicationDbContext())
-            {
-                return await context.Users.FirstOrDefaultAsync(o => o.Id.Equals(Guid.Parse(guid)) && o.Password.Equals(password), cancellationToken);
-            }
+            
+                return await _context.Users.FirstOrDefaultAsync(o => o.Id.Equals(Guid.Parse(guid)) && o.Password.Equals(password), cancellationToken);
+            
         }
 
         public async Task<bool> CheckUser(string guid, CancellationToken cancellationToken)
         {
-            using (var context = new ApplicationDbContext())
-            {
-                return await context.Users.AnyAsync(o => o.Id.Equals(Guid.Parse(guid)), cancellationToken);
-            }
+            
+                return await _context.Users.AnyAsync(o => o.Id.Equals(Guid.Parse(guid)), cancellationToken);
+            
         }
     }
 }
